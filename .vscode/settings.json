@@ -1,0 +1,8 @@
+{
+    "cmake.path": "%userprofile%\\scoop\\shims\\cmake.exe",
+    "ninja.path": "%userprofile%\\scoop\\shims\\ninja.exe",
+    "component.debugTools.gdb.path": "%userprofile%\\scoop\\shims\\gdb.exe",
+    "comilerpat.gcc.path": "%userprofile%\\scoop\\shims\\gcc.exe",
+    "comilerpat.g++.path": "%userprofile%\\scoop\\shims\\g++.exe",
+    "cmake.generator": "Ninja",
+}
