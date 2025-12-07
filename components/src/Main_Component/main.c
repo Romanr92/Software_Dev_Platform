@@ -3,6 +3,8 @@
 #include "CPP_hello.h"
 
 int main() {
+
+    /* print from main */
     printf("Hello, Windows!\n");
 
     /* Call C code */
