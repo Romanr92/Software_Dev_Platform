@@ -8,7 +8,7 @@ int main() {
     /* Call C code */
     c_say_hello();
 
-    /* Call C++ code */ /* testing main push */
+    /* Call C++ code */ 
     cpp_say_hello();
 
     return 0;
