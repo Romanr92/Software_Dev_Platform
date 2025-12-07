@@ -8,8 +8,8 @@ int main() {
     /* Call C code */
     c_say_hello();
 
-    /* Call C++ code */
+    /* Call C++ code */ /* testing main push */
     cpp_say_hello();
-    
+
     return 0;
 }
