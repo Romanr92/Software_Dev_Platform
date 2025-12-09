@@ -24,30 +24,11 @@ message(STATUS "Linking Rust libs: ${_rust_libs}")
 # Create the single executable from all collected component sources
 add_executable(${EXE_NAME} ${_component_sources})
 
-# Make sure executable depends on Rust compilation
-if(TARGET Rust_hello_obj)
-    add_dependencies(${EXE_NAME} Rust_hello_obj)
-endif()
+# Store the executable target globally for components to use
+set_property(GLOBAL PROPERTY SDP_EXE_TARGET ${EXE_NAME})
 
-# Link Rust libraries
-if(_rust_libs)
-    target_link_libraries(${EXE_NAME} PRIVATE ${_rust_libs})
-    
-    # Link Windows libraries required by Rust std
-    if(WIN32)
-        target_link_libraries(${EXE_NAME} PRIVATE 
-            ws2_32       # Winsock
-            ntdll        # NT kernel
-            userenv      # User environment
-            psapi        # Process API
-        )
-    endif()
-endif()
-
-# Include collected component header directories
-if(_component_includes)
-    target_include_directories(${EXE_NAME} PRIVATE ${_component_includes})
-endif()
+# Configure Rust linking and includes
+configure_rust_linking(${EXE_NAME})
 
 # C++ standard
 target_compile_features(${EXE_NAME} PRIVATE cxx_std_17)
