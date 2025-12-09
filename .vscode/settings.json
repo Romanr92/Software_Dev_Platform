@@ -4,5 +4,6 @@
     "component.debugTools.gdb.path": "%userprofile%\\scoop\\shims\\gdb.exe",
     "comilerpat.gcc.path": "%userprofile%\\scoop\\shims\\gcc.exe",
     "comilerpat.g++.path": "%userprofile%\\scoop\\shims\\g++.exe",
+    "comilerpat.zig.path": "%userprofile%\\scoop\\shims\\zig.exe",
     "cmake.generator": "Ninja",
 }
