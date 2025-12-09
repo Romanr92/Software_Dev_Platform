@@ -16,18 +16,15 @@ include(${CMAKE_SOURCE_DIR}/variants/${VARIANT}/config.cmake)
 
 if(BUILD_KIT STREQUAL prod)
     project(${VARIANT} C ASM)
+    project(${VARIANT} C ASM CXX)
 else()
     # C++ project due to GTest usage
     project(${VARIANT} C ASM CXX)
 endif()
 
-# Fetch all external dependencies into modules directory
-set(FETCHCONTENT_BASE_DIR ${PROJECT_SOURCE_DIR}/build/modules CACHE INTERNAL "")
-set(FETCHCONTENT_QUIET FALSE)
-include(FetchContent)
 
-# Include spl-core
-include(".venv/Lib/site-packages/spl_core/spl.cmake")
+# Include SDP helpers (component registration functions)
+include(${CMAKE_SOURCE_DIR}/cmake/sdp.cmake)
 
 # Include variant specific parts/components definitions
 include(${CMAKE_SOURCE_DIR}/variants/${VARIANT}/parts.cmake)
