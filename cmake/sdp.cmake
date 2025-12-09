@@ -60,3 +60,37 @@ function(sdp_add_component component_path)
     file(RELATIVE_PATH _rel_path "${CMAKE_SOURCE_DIR}" "${component_path}")
     add_subdirectory(${component_path} ${CMAKE_BINARY_DIR}/${_rel_path})
 endfunction()
+
+function(sdp_compile_rust_to_object rust_src output_obj)
+    # Compile a Rust source file to an object file (.o)
+    # Usage: sdp_compile_rust_to_object(src/lib.rs ${CMAKE_BINARY_DIR}/lib.o)
+    
+    find_program(RUSTC_EXECUTABLE NAMES rustc REQUIRED)
+    
+    # Determine Rust target
+    if(WIN32)
+        set(_rust_target "x86_64-pc-windows-gnu")
+    else()
+        set(_rust_target "x86_64-unknown-linux-gnu")
+    endif()
+    
+    # Get crate name from source file
+    get_filename_component(_crate_name "${rust_src}" NAME_WE)
+    
+    add_custom_command(
+        OUTPUT "${output_obj}"
+        COMMAND ${RUSTC_EXECUTABLE}
+            --edition 2021
+            -C opt-level=3
+            -C relocation-model=pic
+            --crate-type cdylib
+            --target ${_rust_target}
+            -L "${CMAKE_BINARY_DIR}/deps"
+            "${rust_src}"
+            -o "${output_obj}"
+        DEPENDS "${rust_src}"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+        COMMENT "Compiling Rust source ${rust_src} to object file"
+    )
+endfunction()
+

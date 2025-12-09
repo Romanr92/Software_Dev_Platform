@@ -1,6 +1,7 @@
 #include <iostream>
 extern "C" {
     #include "C_hello.h"
+    void rust_say_hello();  // Rust function declaration
 }
 #include "CPP_hello.h"
 
@@ -14,6 +15,9 @@ int main() {
 
     /* Call C++ code */ 
     cpp_say_hello();
+
+    /* Call Rust code */
+    rust_say_hello();
 
     return 0;
 }

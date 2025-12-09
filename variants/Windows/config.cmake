@@ -5,6 +5,34 @@
 
 message(STATUS "Configuring variant: Windows")
 
+# Include Rust compiler toolchain
+include(${CMAKE_SOURCE_DIR}/tools/RustCompiler/toolchain.cmake)
+
+# Helper function to configure Rust linking for the executable
+function(configure_rust_linking exe_target)
+    # Link Rust libraries
+    get_property(_rust_libs GLOBAL PROPERTY SDP_RUST_LIBS)
+    if(_rust_libs)
+        target_link_libraries(${exe_target} PRIVATE ${_rust_libs})
+        
+        # Link Windows libraries required by Rust std
+        if(WIN32)
+            target_link_libraries(${exe_target} PRIVATE 
+                ws2_32       # Winsock
+                ntdll        # NT kernel
+                userenv      # User environment
+                psapi        # Process API
+            )
+        endif()
+    endif()
+    
+    # Include collected component header directories
+    get_property(_component_includes GLOBAL PROPERTY SDP_COMPONENT_INCLUDES)
+    if(_component_includes)
+        target_include_directories(${exe_target} PRIVATE ${_component_includes})
+    endif()
+endfunction()
+
 # Example: build-type / kit specific logic (adjust or remove as you like)
 if(BUILD_KIT STREQUAL prod)
     message(STATUS "  BUILD_KIT = prod")
