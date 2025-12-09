@@ -1,0 +1,3 @@
+sdp_add_source(src/main.cpp)
+
+sdp_create_component(LONG_NAME "Core Component")

@@ -1,11 +1,13 @@
-#include <stdio.h>
-#include "C_hello.h"
+#include <iostream>
+extern "C" {
+    #include "C_hello.h"
+}
 #include "CPP_hello.h"
 
 int main() {
 
     /* print from main */
-    printf("Hello, Windows!\n");
+    std::cout<< "Hello, Windows!" << std::endl;
 
     /* Call C code */
     c_say_hello();

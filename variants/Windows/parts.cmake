@@ -1,42 +1,39 @@
-# variants/Windows/parts.cmake
-#
-# "Windows" here is just your variant name, not Microsoft Windows.
 
-message(STATUS "Configuring targets for Windows variant")
 
-# 1) Core library module (component)
-# --------------------------------------------------
-add_library(core STATIC
-    ${CMAKE_SOURCE_DIR}/components/Core_component/src/main.c
-    # add more source files for this module here
-)
+# Add component subdirectories to register and collect their sources
+sdp_add_component(${CMAKE_SOURCE_DIR}/components/Core_Component)
+sdp_add_component(${CMAKE_SOURCE_DIR}/components/C_Components/C_Hello)
+sdp_add_component(${CMAKE_SOURCE_DIR}/components/CPP_Components/CPP_Hello)
 
-# target_include_directories(core
-#     PUBLIC
-#         ${CMAKE_SOURCE_DIR}/components/Core_components
-# )
+# Collect all component sources from global property
+get_property(_component_sources GLOBAL PROPERTY SDP_COMPONENT_SOURCES)
+get_property(_component_includes GLOBAL PROPERTY SDP_COMPONENT_INCLUDES)
 
-# Example of variant-specific compile definitions/options:
-target_compile_definitions(core
-    PUBLIC
-        VARIANT_WINDOWS=1
-)
+# Define executable name (can be overridden with -DEXE_NAME=...)
+if(NOT DEFINED EXE_NAME)
+    set(EXE_NAME "${PROJECT_NAME}")
+endif()
 
-# 2) Main executable for this variant
-# --------------------------------------------------
-add_executable(${PROJECT_NAME}
-    ${CMAKE_SOURCE_DIR}/src/main.c
-    # you can add Windows-variant-specific sources here as well
-)
+message(STATUS "Building executable '${EXE_NAME}' from sources: ${_component_sources}")
 
-# Link the core module into the executable
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE
-        core
-)
+# Create the single executable from all collected component sources
+add_executable(${EXE_NAME} ${_component_sources})
 
-# Optional: variant-specific definitions for the main executable
-target_compile_definitions(${PROJECT_NAME}
+# Include collected component header directories
+if(_component_includes)
+    target_include_directories(${EXE_NAME} PRIVATE ${_component_includes})
+endif()
+
+# C++ standard
+target_compile_features(${EXE_NAME} PRIVATE cxx_std_17)
+
+# Variant-specific definitions
+target_compile_definitions(${EXE_NAME}
     PRIVATE
         VARIANT_WINDOWS=1
+)
+
+# Output directory for binaries
+set_target_properties(${EXE_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )

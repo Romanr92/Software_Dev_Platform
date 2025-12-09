@@ -23,5 +23,8 @@ else()
 endif()
 
 
+# Include SDP helpers (component registration functions)
+include(${CMAKE_SOURCE_DIR}/cmake/sdp.cmake)
+
 # Include variant specific parts/components definitions
 include(${CMAKE_SOURCE_DIR}/variants/${VARIANT}/parts.cmake)
