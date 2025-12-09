@@ -5,6 +5,9 @@
 
 message(STATUS "Configuring variant: Windows")
 
+# Include Rust compiler toolchain
+include(${CMAKE_SOURCE_DIR}/tools/RustCompiler/toolchain.cmake)
+
 # Example: build-type / kit specific logic (adjust or remove as you like)
 if(BUILD_KIT STREQUAL prod)
     message(STATUS "  BUILD_KIT = prod")
